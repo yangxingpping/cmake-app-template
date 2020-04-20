@@ -11,6 +11,9 @@ set(_test_ver "NOK")
 set(BUILD_REVISION "unknown")
 set(BUILD_REVISION_CONTROLLER "unknown")
 set(BUILD_REVISION_BRANCH "unknown")
+set(BUILDE "")
+set(EXEOUT "")
+
 
 execute_process(
     COMMAND git ls-remote --get-url
@@ -40,6 +43,8 @@ if(GIT_WORK_COPY)
     execute_process(
         COMMAND git rev-parse --short HEAD
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+        RESULT_VARIABLE EXEOUT
+        ERROR_VARIABLE BUILDE
         OUTPUT_VARIABLE BUILD_REVISION
         ERROR_QUIET
         OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -52,11 +57,16 @@ elseif(SVN_WORK_COPY)
         COMMAND grep Revision 
         COMMAND egrep -o "${paramEgrep}"
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+        RESULT_VARIABLE EXEOUT
+        ERROR_VARIABLE BUILDE
         OUTPUT_VARIABLE BUILD_REVISION
         ERROR_QUIET
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 endif()
+
+message("reuslt:${EXEOUT}")
+message("error:${BUILDE}")
 
 message("BUILD_REVISION: ${BUILD_REVISION}")
 message("BUILD_REVISION_CONTROLLER: ${BUILD_REVISION_CONTROLLER}")
